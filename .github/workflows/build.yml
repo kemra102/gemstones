@@ -106,7 +106,7 @@ jobs:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          registry: ${{ steps.registry_case.outputs.lowercase }}
+          registry: ${{ env.IMAGE_REGISTRY }}
           image: ${{ matrix.image }}
           tags: ${{ steps.metadata.outputs.tags }}
           username: ${{ env.REGISTRY_USER }}
