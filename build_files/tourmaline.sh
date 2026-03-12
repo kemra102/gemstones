@@ -30,6 +30,11 @@ done
 dnf5 --assumeyes install k3b flac solaar zsh
 
 
+# Enable automatic firmware updates
+ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
+	/usr/lib/systemd/system/timers.target.wants/fwupd-refresh.timer
+
+
 # Install Atuin
 ATUIN_VERSION='18.12.1'
 ATUIN_FILE_NAME="atuin-x86_64-unknown-linux-gnu" # without file extension
