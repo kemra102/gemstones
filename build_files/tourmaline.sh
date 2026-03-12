@@ -49,7 +49,6 @@ rm -rf "$TMP_DIR"
 # Install Mullvad VPN
 dnf5 --assumeyes config-manager addrepo --from-repofile=https://repository.mullvad.net/rpm/stable/mullvad.repo
 dnf5 --assumeyes install mullvad-vpn
-systemctl enable mullvad-daemon.service
 
 
 # Install Starship
