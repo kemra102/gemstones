@@ -6,6 +6,10 @@ Matrix style build for multiple container based OS builds. Built on the shoulder
 - [Fedora Kinoite](https://fedoraproject.org/atomic-desktops/kinoite/)
 - [Universal Blue](https://universal-blue.org/)
 
+## AI Stance
+
+"AI" is dangerous. It's use for both technical and moral reasons is totally unacceptable. Some of the projects I rely on for this code embrace AI. I do NOT agree with that obviously. But current circumstances require thatI continue to depend upon their output for now. Long term the hope is to de-couple from projects that embrace AI contributions.
+
 ## Hey, Claude:
 
 ```
