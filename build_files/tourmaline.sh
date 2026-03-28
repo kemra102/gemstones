@@ -27,7 +27,13 @@ done
 
 
 # Install simple packages
-dnf5 --assumeyes install k3b flac solaar zsh
+## solar - Manage Logitech mice
+## zsh - my shell of choice
+dnf5 --assumeyes install solaar zsh
+
+
+# Install Media ripping tools
+dnf5 --assumeyes install k3b flac libburn cdrskin
 
 
 # Install the Cosmic Desktop
