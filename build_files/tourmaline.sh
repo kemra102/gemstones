@@ -33,11 +33,6 @@ dnf5 --assumeyes install k3b flac solaar zsh
 dnf5 --assumeyes install @cosmic-desktop-environment
 
 
-# Install Steam native
-dnf5 config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-steam.repo
-dnf5 --assumeyes install steam kernel-modules-extra
-
-
 # Enable automatic firmware updates
 ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
 	/usr/lib/systemd/system/timers.target.wants/fwupd-refresh.timer
