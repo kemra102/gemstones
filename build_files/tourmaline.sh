@@ -29,6 +29,9 @@ done
 # Install simple packages
 dnf5 --assumeyes install k3b flac solaar zsh
 
+# Install the Cosmic Desktop
+dnf5 --assumeyes install @cosmic-desktop-environment
+
 
 # Enable automatic firmware updates
 ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
