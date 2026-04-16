@@ -50,7 +50,7 @@ ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
 
 
 # Install Atuin
-ATUIN_VERSION='18.13.6'
+ATUIN_VERSION='18.15.2'
 ATUIN_FILE_NAME="atuin-x86_64-unknown-linux-gnu" # without file extension
 TMP_DIR=$(mktemp -d)
 
