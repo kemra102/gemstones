@@ -29,7 +29,7 @@ jobs:
         include:
           - image: quartz
             build_args: |
-              BASE_CONTAINER=ghcr.io/ublue-os/kinoite-main:43
+              BASE_CONTAINER=ghcr.io/ublue-os/kinoite-main:44
               BUILD_SCRIPT=quartz.sh
           - image: tourmaline
             build_args: |
