@@ -37,6 +37,10 @@ done
 dnf5 --assumeyes install neovim solaar zsh
 
 
+# Install packages to make AppImages work.
+dnf5 --assumeyes install fuse fuse-libs
+
+
 # Install Media ripping tools
 dnf5 --assumeyes install k3b flac libburn cdrskin
 
