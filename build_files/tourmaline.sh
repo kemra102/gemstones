@@ -31,9 +31,10 @@ done
 
 
 # Install simple packages
+## neovim - Testing out as my new editor/IDE
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
-dnf5 --assumeyes install solaar zsh
+dnf5 --assumeyes install neovim solaar zsh
 
 
 # Install Media ripping tools
