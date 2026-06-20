@@ -36,14 +36,14 @@ EOF
 
 
 # Install RPM packages
-## crdskin - Media ripping support
+## cdrskin - Media ripping support
 ## flac - Media ripping/playback support
 ## fuse-libs - Suppoort AppImage
 ## k3b - Media ripping tool (not on Flathub)
 ## libburn - Media ripping suport
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
-dnf5 --assumeyes install crdskin flac fuse-libs k3b libburn solaar zsh
+dnf5 --assumeyes install cdrskin flac fuse-libs k3b libburn solaar zsh
 
 
 # Install the Cosmic Desktop
