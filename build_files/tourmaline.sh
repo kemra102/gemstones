@@ -50,7 +50,7 @@ dnf5 --assumeyes install crdskin flac fuse-libs k3b libburn solaar zsh
 # dnf5 --assumeyes install @cosmic-desktop-environment
 
 
-# Enable automatic firmware updates
+# Enable automatic firmware metadata updates
 ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
 	/usr/lib/systemd/system/timers.target.wants/fwupd-refresh.timer
 
