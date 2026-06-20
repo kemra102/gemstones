@@ -30,14 +30,14 @@ for OPTPKG in "${OPTFIX[@]}"; do
 done
 
 
-# Install simple packages
+# Install RPM packages
+## crdskin - Media ripping support
+## flac - Media ripping/playback support
+## k3b - Media ripping tool (not on Flathub)
+## libburn - Media ripping suport
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
-dnf5 --assumeyes install solaar zsh
-
-
-# Install Media ripping tools
-dnf5 --assumeyes install k3b flac libburn cdrskin
+dnf5 --assumeyes install crdskin flac k3b libburn solaar zsh
 
 
 # Install the Cosmic Desktop
