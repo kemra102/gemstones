@@ -38,7 +38,12 @@ done
 ## libburn - Media ripping suport
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
-dnf5 --assumeyes install cdrskin flac fuse-libs k3b libburn solaar zsh
+
+dnf5 --assumeyes config-manager addrepo --from-repofile=https://repository.mullvad.net/rpm/stable/mullvad.repo
+dnf5 --assumeyes config-manager addrepo --id=vscodium --set=baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/ --set=gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg --set=repo_gpgcheck=true
+
+dnf5 --assumeyes install cdrskin codium flac fuse-libs k3b libburn mullvad-vpn \
+    solaar zsh
 
 
 # Install the Cosmic Desktop
@@ -66,18 +71,8 @@ install "${TMP_DIR}/${ATUIN_FILE_NAME}/atuin" /usr/bin
 rm -rf "$TMP_DIR"
 
 
-# Install Mullvad VPN
-dnf5 --assumeyes config-manager addrepo --from-repofile=https://repository.mullvad.net/rpm/stable/mullvad.repo
-dnf5 --assumeyes install mullvad-vpn
-
-
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir /usr/bin
-
-
-# Install VSCodium
-dnf5 --assumeyes config-manager addrepo --id=vscodium --set=baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/ --set=gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg --set=repo_gpgcheck=true
-dnf5 --assumeyes install codium
 
 
 # Install YADM
