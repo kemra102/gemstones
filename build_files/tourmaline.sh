@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+shopt -s nullglob
+
 
 # We're gonna get Firefox from Flathub so remove the native version.
 dnf5 --assumeyes remove firefox firefox-langpacks
@@ -14,20 +16,11 @@ fi
 
 
 # Enable install to /opt
+# On libostree systems, /opt is a symlink to /var/opt,
+# which actually only exists on the live system.
 echo "Creating symlinks to fix packages that install to /opt"
 # Create symlink for /opt to /var/opt since it is not created in the image yet
 install -d "/var/opt"
-ln -fs "/var/opt"  "/opt"
-
-# Create symlinks for each directory specified
-OPTFIX=(Mullvad\ VPN)
-for OPTPKG in "${OPTFIX[@]}"; do
-    OPTPKG="${OPTPKG%\"}"
-    OPTPKG="${OPTPKG#\"}"
-    install -d "/usr/lib/opt/${OPTPKG}"
-    ln -fs "/usr/lib/opt/${OPTPKG}" "/var/opt/${OPTPKG}"
-    echo "Created symlinks for ${OPTPKG}"
-done
 
 
 # Install RPM packages
@@ -77,3 +70,21 @@ curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir /usr/bin
 
 # Install YADM
 curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x /usr/bin/yadm
+
+
+# Complete setup for packages installed to /opt
+# Create symlinks for each directory specified
+optfix_dir="/usr/lib/opt"
+# needs nullglob, so that this array is empty if /opt is empty
+optdirs=("${optfix_dir}"/*) # returns a list of directories in /opt
+if [[ -n "${optdirs[*]}" ]]; then
+    echo "Creating symlinks to fix packages that installed to /opt:"
+    for optdir in "${optdirs[@]}"; do
+        opt=$(basename "${optdir}")
+        lib_opt_dir="${optfix_dir}/${opt}"
+        link_opt_dir="/opt/${opt}"
+        echo "Linking ${link_opt_dir} => ${lib_opt_dir}"
+        echo "L+?  \"${link_opt_dir}\"  -  -  -  -  ${lib_opt_dir}" | \
+            tee "/usr/lib/tmpfiles.d/99-optfix-${opt}.conf"
+    done
+fi
