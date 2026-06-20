@@ -19,8 +19,11 @@ ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
 # Enable install to /opt
 # On libostree systems, /opt is a symlink to /var/opt,
 # which actually only exists on the live system.
-install -d "/var/opt"
-ln -fs "/var/opt"  "/opt"
+optfix_dir="/usr/lib/opt"
+echo "Preparing system for optfix..."
+mkdir -pv "${optfix_dir}"
+echo "Linking /opt => ${optfix_dir}"
+ln -fs "${optfix_dir}" /opt
 
 
 # We're gonna get Firefox from Flathub so remove the native version.
@@ -77,7 +80,7 @@ curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm 
 
 # Complete setup for packages installed to /opt
 # Create symlinks for each directory specified
-optfix_dir="/usr/lib/opt"
+
 # needs nullglob, so that this array is empty if /opt is empty
 optdirs=("${optfix_dir}"/*) # returns a list of directories in /opt
 if [[ -n "${optdirs[*]}" ]]; then
