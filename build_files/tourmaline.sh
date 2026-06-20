@@ -5,22 +5,26 @@ set -ouex pipefail
 shopt -s nullglob
 
 
-# We're gonna get Firefox from Flathub so remove the native version.
-dnf5 --assumeyes remove firefox firefox-langpacks
-
-
 # Disable Discover notifier as we automate updates in the background
 if [[ -f /etc/xdg/autostart/org.kde.discover.notifier.desktop ]]; then
     rm -f /etc/xdg/autostart/org.kde.discover.notifier.desktop
 fi
 
 
+# Enable automatic firmware metadata updates
+ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
+	/usr/lib/systemd/system/timers.target.wants/fwupd-refresh.timer
+
+
 # Enable install to /opt
 # On libostree systems, /opt is a symlink to /var/opt,
 # which actually only exists on the live system.
-echo "Creating symlinks to fix packages that install to /opt"
-# Create symlink for /opt to /var/opt since it is not created in the image yet
 install -d "/var/opt"
+ln -fs "/var/opt"  "/opt"
+
+
+# We're gonna get Firefox from Flathub so remove the native version.
+dnf5 --assumeyes remove firefox firefox-langpacks
 
 
 # Install RPM packages
@@ -32,8 +36,13 @@ install -d "/var/opt"
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
 
-dnf5 --assumeyes config-manager addrepo --from-repofile=https://repository.mullvad.net/rpm/stable/mullvad.repo
-dnf5 --assumeyes config-manager addrepo --id=vscodium --set=baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/ --set=gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg --set=repo_gpgcheck=true
+dnf5 --assumeyes config-manager addrepo \
+    --from-repofile=https://repository.mullvad.net/rpm/stable/mullvad.repo
+
+dnf5 --assumeyes config-manager addrepo --id=vscodium \
+    --set=baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/ \
+    --set=gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg \
+    --set=repo_gpgcheck=true
 
 dnf5 --assumeyes install cdrskin codium flac fuse-libs k3b libburn mullvad-vpn \
     solaar zsh
@@ -43,33 +52,27 @@ dnf5 --assumeyes install cdrskin codium flac fuse-libs k3b libburn mullvad-vpn \
 # dnf5 --assumeyes install @cosmic-desktop-environment
 
 
-# Enable automatic firmware metadata updates
-ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
-	/usr/lib/systemd/system/timers.target.wants/fwupd-refresh.timer
-
-
 # Install Atuin
 ATUIN_VERSION='18.16.1'
 ATUIN_FILE_NAME="atuin-x86_64-unknown-linux-gnu" # without file extension
 TMP_DIR=$(mktemp -d)
 
-curl -sL "https://github.com/atuinsh/atuin/releases/download/v${ATUIN_VERSION}/${ATUIN_FILE_NAME}.tar.gz" --output - | tar -xzf - -C "$TMP_DIR"
+curl -sL "https://github.com/atuinsh/atuin/releases/download/v${ATUIN_VERSION}/${ATUIN_FILE_NAME}.tar.gz" \
+    --output - | tar -xzf - -C "$TMP_DIR"
 
 install "${TMP_DIR}/${ATUIN_FILE_NAME}/atuin" /usr/bin
 
 # Shell completions no longer included in release tarball
 # So generate them now
 /usr/bin/atuin gen-completions --shell zsh --out-dir /usr/share/zsh/site-functions/
-
-rm -rf "$TMP_DIR"
-
+rm -rf "$TMP_DIR" # cleanup atuin tmpdir
 
 # Install Starship
 curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir /usr/bin
 
-
 # Install YADM
-curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x /usr/bin/yadm
+curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && \
+    chmod a+x /usr/bin/yadm
 
 
 # Complete setup for packages installed to /opt
