@@ -29,6 +29,11 @@ for OPTPKG in "${OPTFIX[@]}"; do
     echo "Created symlinks for ${OPTPKG}"
 done
 
+# At runtime link /opt to /usr/lib/opt
+cat >/usr/lib/tmpfiles.d/opt.conf <<EOF
+L  /opt  -  -  -  -  /usr/lib/opt
+EOF
+
 
 # Install RPM packages
 ## crdskin - Media ripping support
