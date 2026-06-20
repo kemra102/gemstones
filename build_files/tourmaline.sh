@@ -33,11 +33,12 @@ done
 # Install RPM packages
 ## crdskin - Media ripping support
 ## flac - Media ripping/playback support
+## fuse-libs - Suppoort AppImage
 ## k3b - Media ripping tool (not on Flathub)
 ## libburn - Media ripping suport
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
-dnf5 --assumeyes install crdskin flac k3b libburn solaar zsh
+dnf5 --assumeyes install crdskin flac fuse-libs k3b libburn solaar zsh
 
 
 # Install the Cosmic Desktop
@@ -50,7 +51,7 @@ ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
 
 
 # Install Atuin
-ATUIN_VERSION='18.15.2'
+ATUIN_VERSION='18.16.1'
 ATUIN_FILE_NAME="atuin-x86_64-unknown-linux-gnu" # without file extension
 TMP_DIR=$(mktemp -d)
 
