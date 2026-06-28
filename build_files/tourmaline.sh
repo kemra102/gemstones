@@ -20,6 +20,7 @@ dnf5 --assumeyes remove firefox firefox-langpacks
 
 # Install RPM packages
 ## cdrskin - Media ripping support
+## codium - GUI IDEA of choice
 ## flac - Media ripping/playback support
 ## fuse-libs - Suppoort AppImage
 ## k3b - Media ripping tool (not on Flathub)
