@@ -4,7 +4,7 @@ ARG BUILD_SCRIPT
 
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
-COPY build_files/$BUILD_SCRIPT /
+COPY build_files/ /
 
 # Base Image
 FROM $BASE_CONTAINER

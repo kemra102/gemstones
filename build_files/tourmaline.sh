@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 
-source build_files/snippets/opt_pre.sh
+source /ctx/snippets/opt_pre.sh
 
 
 # Disable Discover notifier as we automate updates in the background
@@ -72,4 +72,4 @@ curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm 
     chmod a+x /usr/bin/yadm
 
 
-source build_files/snippets/opt_post.sh
+source /ctx/snippets/opt_post.sh
