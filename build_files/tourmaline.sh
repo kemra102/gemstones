@@ -23,17 +23,23 @@ dnf5 --assumeyes remove firefox firefox-langpacks
 ## codium - GUI IDEA of choice
 ## flac - Media ripping/playback support
 ## fuse-libs - Suppoort AppImage
+## iptables-legacy - Dependency for iVPN
+## ivpn-ui - Installs the iVPN CLi and (G)UI
 ## k3b - Media ripping tool (not on Flathub)
 ## libburn - Media ripping suport
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
+
+dnf --asumeyes config-manager addrepo \
+    --from-repofile=https://repo.ivpn.net/stable/fedora/generic/ivpn.repo
 
 dnf5 --assumeyes config-manager addrepo --id=vscodium \
     --set=baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/ \
     --set=gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg \
     --set=repo_gpgcheck=true
 
-dnf5 --assumeyes install cdrskin codium flac fuse-libs k3b libburn solaar zsh
+dnf5 --assumeyes install cdrskin codium flac fuse-libs iptables-legacy ivpn-ui \
+    k3b libburn solaar zsh
 
 
 # Install the Cosmic Desktop
