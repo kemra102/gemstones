@@ -30,7 +30,7 @@ dnf5 --assumeyes remove firefox firefox-langpacks
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
 
-dnf --asumeyes config-manager addrepo \
+dnf5 --assumeyes config-manager addrepo \
     --from-repofile=https://repo.ivpn.net/stable/fedora/generic/ivpn.repo
 
 dnf5 --assumeyes config-manager addrepo --id=vscodium \
