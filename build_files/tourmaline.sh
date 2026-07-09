@@ -50,7 +50,7 @@ dnf5 --assumeyes install cdrskin codium flac fuse-libs iptables-legacy ivpn-ui \
 
 
 # Install Atuin
-ATUIN_VERSION='18.16.1'
+ATUIN_VERSION='18.17.0'
 ATUIN_FILE_NAME="atuin-x86_64-unknown-linux-gnu" # without file extension
 TMP_DIR=$(mktemp -d)
 
