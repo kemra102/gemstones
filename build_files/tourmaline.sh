@@ -30,6 +30,7 @@ dnf5 --assumeyes remove firefox firefox-langpacks
 ## ivpn-ui - Installs the iVPN CLi and (G)UI
 ## k3b - Media ripping tool (not on Flathub)
 ## libburn - Media ripping suport
+## neovim - My new editor?
 ## solar - Manage Logitech mice
 ## zsh - my shell of choice
 
@@ -42,7 +43,7 @@ dnf5 --assumeyes config-manager addrepo --id=vscodium \
     --set=repo_gpgcheck=true
 
 dnf5 --assumeyes install cdrskin codium flac fuse-libs iptables-legacy ivpn-ui \
-    k3b libburn solaar zsh
+    k3b libburn neovim solaar zsh
 
 
 # Install the Cosmic Desktop
