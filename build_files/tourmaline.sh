@@ -13,8 +13,7 @@ fi
 
 
 # Enable automatic firmware metadata updates
-ln -s /usr/lib/systemd/system/fwupd-refresh.timer \
-	/usr/lib/systemd/system/timers.target.wants/fwupd-refresh.timer
+systemctl enable fwupd-refresh.timer
 
 
 # We're gonna get Firefox from Flathub so remove the native version.
