@@ -14,12 +14,15 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_DESC: "My Customized Universal Blue Image"
-  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
+  IMAGE_DESC: "My Customized Fedora Image"
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
+  REGISTRY_USER: ${{ github.repository_owner }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+  SOURCE_REPO: "https://github.com/${{ github.repository }}"
 
 jobs:
   includes_only:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
       packages: write
@@ -37,74 +40,72 @@ jobs:
               BUILD_SCRIPT=tourmaline.sh
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+        uses: actions/checkout@v5
       
       - name: Get current date
         id: date
         run: |
-          # This generates a timestamp like what is defined on the ArtifactHub documentation
+          # This generates a timestamp like that which is defined in the
+          # ArtifactHub documentation
           # E.G: 2022-02-08T15:38:15Z'
           # https://artifacthub.io/docs/topics/repositories/container-images/
           # https://linux.die.net/man/1/date
           echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> $GITHUB_OUTPUT
 
       - name: Image Metadata
-        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        uses: docker/metadata-action@v6
         id: metadata
         with:
-          # This generates all the tags for your image, you can add custom tags here too!
-          # By default, it should generate "latest" and "latest.(date here)".
+          # https://github.com/docker/metadata-action#tags-input
           tags: |
             type=raw,value=latest
             type=raw,value=latest.{{date 'YYYYMMDD'}}
             type=raw,value={{date 'YYYYMMDD'}}
             type=sha,enable=${{ github.event_name == 'pull_request' }}
-            type=ref,event=pr
+          # https://github.com/opencontainers/image-spec/blob/main/annotations.md
           labels: |
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
             org.opencontainers.image.description=${{ env.IMAGE_DESC }}
-            org.opencontainers.image.documentation=https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ matrix.image }}/refs/heads/main/README.md
-            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ matrix.image }}/blob/main/Containerfile
+            org.opencontainers.image.documentation=https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/README.md
+            org.opencontainers.image.source=${{ env.SOURCE_REPO }}
             org.opencontainers.image.title=${{ matrix.image }}
-            org.opencontainers.image.url=https://github.com/${{ github.repository_owner }}/${{ matrix.image }}
+            org.opencontainers.image.url=${{ env.SOURCE_REPO }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
             org.opencontainers.image.version=latest
             containers.bootc=1
+            ostree.bootable=1
           sep-tags: " "
           sep-annotations: " "
 
       - name: Build Image
         id: build_image
-        uses: redhat-actions/buildah-build@719e3c40d8af9790c23eca13f7daa339f2867034 # v2
+        uses: redhat-actions/buildah-build@v3
         with:
           containerfiles: |
             ./Containerfile
           build-args: |
             ${{ matrix.build_args }}
-          # Postfix image name with -custom to make it a little more descriptive
-          # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
           image: ${{ matrix.image }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           oci: false
       
-      # These `if` statements are so that pull requests for your custom images do not make it publish any packages under your name without you knowing
-      # They also check if the runner is on the default branch so that things like the merge queue (if you enable it), are going to work
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+      # These `if` statements are so that pull requests for your custom images
+      # do not make it publish any packages under your name without you knowing
+      # They also check if the runner is on the default branch so that things
+      # like the merge queue (if you enable it), are going to work
+      - name: Login to GHCR
+        uses: redhat-actions/podman-login@v1
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@94ade333c38ecc0e60e94785125d9a52ca423b37 # v2
+        uses: redhat-actions/push-to-registry@v3
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
-        env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
         with:
           registry: ${{ env.IMAGE_REGISTRY }}
           image: ${{ matrix.image }}
