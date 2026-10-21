@@ -72,3 +72,5 @@ curl -fLo /usr/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm 
 
 
 source /ctx/snippets/opt_post.sh
+
+bootc container lint
